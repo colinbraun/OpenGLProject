@@ -1,6 +1,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "vec4.h"
 
 // Function Prototypes
 GLFWwindow* setupGLFW();
@@ -14,17 +15,22 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main() {
 	GLFWwindow* window = setupGLFW();
-
+	vec4<float> v = vec4<float>(1.0f, 1.0f, 1.0f, 1.0f);
+	vec4<float> v2 = vec4<float>(1.0f, 1.0f, 1.0f, 1.0f);
+	vec4<float> v3 = v + v2;
+	std::cout << v3.x;
 	while (!glfwWindowShouldClose(window)) {
-
+		processInput(window);
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 	return 0;
 }
 
 GLFWwindow* setupGLFW() {
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGLProject", NULL, NULL);
 	if (window == NULL) {
@@ -34,7 +40,8 @@ GLFWwindow* setupGLFW() {
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
