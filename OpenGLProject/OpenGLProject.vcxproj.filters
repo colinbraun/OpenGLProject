@@ -38,6 +38,9 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="matmath.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertexShader.vs">

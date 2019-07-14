@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "vec4.h"
 #include "Shader.h"
+#include "matmath.h"
 
 // Function Prototypes
 GLFWwindow* setupGLFW();
@@ -19,8 +20,10 @@ int main() {
 
 	Shader shader("vertexShader.vs", "fragmentShader.fs");
 
-	mat4<float> mat = mat4<float>();
+	mat4<> mat = mat4<>();
 	mat[0][0] = 0.5;
+	//mat4<> tMat = translate<>(0.3f, 0.0f, 0.0f);
+	mat4<> tMat = scale<>(0.3f, 1.8f, 1.0f);
 	/*float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
 			0.5f, -0.5f, -0.5f,    //  1.0f, 0.0f,
 			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
@@ -84,7 +87,7 @@ int main() {
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	shader.use();
-	shader.setMat4f("theMatrix", mat);
+	shader.setMat4f("theMatrix", tMat);
 	// Main game loop
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);

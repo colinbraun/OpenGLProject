@@ -42,7 +42,7 @@ public:
 			return y;
 		case 2:
 			return z;
-		case 3:
+		default:
 			return w;
 		}
 	}
