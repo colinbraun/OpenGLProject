@@ -149,6 +149,7 @@
     <ClInclude Include="mat4.h" />
     <ClInclude Include="matmath.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="vec3.h" />
     <ClInclude Include="vec4.h" />
   </ItemGroup>
   <ItemGroup>

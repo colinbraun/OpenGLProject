@@ -41,6 +41,9 @@
     <ClInclude Include="matmath.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="vec3.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertexShader.vs">

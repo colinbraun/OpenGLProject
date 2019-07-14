@@ -30,6 +30,10 @@ public:
 		return vec4(x - v.x, y - v.y, z - v.z, w - v.w);
 	}
 
+	vec4 operator-() {
+		return vec4(-x, -y, -z, -w);
+	}
+
 	T dot(vec4 v) {
 		return x * v.x + y * v.y + z * v.z + w * v.w;
 	}

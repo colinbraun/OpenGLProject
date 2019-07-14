@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -97,7 +98,7 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		deg = deg + 0.8;
+		deg = deg + 0.8f;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
