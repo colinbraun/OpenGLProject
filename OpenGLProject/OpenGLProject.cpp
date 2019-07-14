@@ -15,15 +15,71 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main() {
 	GLFWwindow* window = setupGLFW();
-	vec4<float> v = vec4<float>(1.0f, 1.0f, 1.0f, 1.0f);
-	vec4<float> v2 = vec4<float>(1.0f, 1.0f, 1.0f, 1.0f);
-	vec4<float> v3 = v + v2;
-	std::cout << v3.x;
+
+	float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
+			0.5f, -0.5f, -0.5f,    //  1.0f, 0.0f,
+			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
+			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
+			-0.5f, 0.5f, -0.5f,    //  0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
+
+			-0.5f, -0.5f, 0.5f,    //  0.0f, 0.0f,
+			0.5f, -0.5f, 0.5f,    //  1.0f, 0.0f,
+			0.5f, 0.5f, 0.5f,    //  1.0f, 1.0f,
+			0.5f, 0.5f, 0.5f,    //  1.0f, 1.0f,
+			-0.5f, 0.5f, 0.5f,    //  0.0f, 1.0f,
+			-0.5f, -0.5f, 0.5f,    //  0.0f, 0.0f,
+
+			-0.5f, 0.5f, 0.5f,    //  1.0f, 0.0f,
+			-0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f,    //  0.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f,    //  0.0f, 1.0f,
+			-0.5f, -0.5f, 0.5f,    //  0.0f, 0.0f,
+			-0.5f, 0.5f, 0.5f,    //  1.0f, 0.0f,
+
+			0.5f, 0.5f, 0.5f,    //  1.0f, 0.0f,
+			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
+			0.5f, -0.5f, -0.5f,    //  0.0f, 1.0f,
+			0.5f, -0.5f, -0.5f,    //  0.0f, 1.0f,
+			0.5f, -0.5f, 0.5f,    //  0.0f, 0.0f,
+			0.5f, 0.5f, 0.5f,    //  1.0f, 0.0f,
+
+			-0.5f, -0.5f, -0.5f,    //  0.0f, 1.0f,
+			0.5f, -0.5f, -0.5f,    //  1.0f, 1.0f,
+			0.5f, -0.5f, 0.5f,    //  1.0f, 0.0f,
+			0.5f, -0.5f, 0.5f,    //  1.0f, 0.0f,
+			-0.5f, -0.5f, 0.5f,    //  0.0f, 0.0f,
+			-0.5f, -0.5f, -0.5f,    //  0.0f, 1.0f,
+
+			-0.5f, 0.5f, -0.5f,    //  0.0f, 1.0f,
+			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
+			0.5f, 0.5f, 0.5f,    //  1.0f, 0.0f,
+			0.5f, 0.5f, 0.5f,    //  1.0f, 0.0f,
+			-0.5f, 0.5f, 0.5f,    //  0.0f, 0.0f,
+			-0.5f, 0.5f, -0.5f    //,  0.0f, 1.0f
+	};
+	unsigned int cubeVBO, cubeVAO;
+	glGenBuffers(1, &cubeVBO);
+	glGenVertexArrays(1, &cubeVAO);
+	
+	glBindVertexArray(cubeVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+	//Set up the position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// Main game loop
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	glfwTerminate();
 	return 0;
 }
 
