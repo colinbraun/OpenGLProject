@@ -3,6 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include <glad/glad.h>
+#include "mat4.h"
 using namespace std;
 // Class to simplify dealing with shaders
 class Shader {
@@ -20,7 +21,7 @@ public:
 			fragmentShaderFile.open(fragmentPath);
 			stringstream vertexBuffer, fragmentBuffer;
 			vertexBuffer << vertexShaderFile.rdbuf();
-			vertexBuffer << fragmentShaderFile.rdbuf();
+			fragmentBuffer << fragmentShaderFile.rdbuf();
 			vertexCode = vertexBuffer.str();
 			fragmentCode = fragmentBuffer.str();
 		}
@@ -63,5 +64,9 @@ public:
 	// ------------------------------------------------------------------------
 	void setFloat(const std::string& name, float value) const {
 		glUniform1f(glGetUniformLocation(program, name.c_str()), value);
+	}
+
+	void setMat4f(const std::string& name, mat4<float> value) const {
+		glUniformMatrix4fv(glGetUniformLocation(program, name.c_str()), 1, GL_FALSE, value.ptr());
 	}
 };

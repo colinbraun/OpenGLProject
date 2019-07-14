@@ -26,7 +26,15 @@ public:
 		return vec4(x + v.x, y + v.y, z + v.z, w + v.w);
 	}
 
-	T operator[](int i) {
+	vec4 operator-(vec4 v) {
+		return vec4(x - v.x, y - v.y, z - v.z, w - v.w);
+	}
+
+	T dot(vec4 v) {
+		return x * v.x + y * v.y + z * v.z + w * v.w;
+	}
+
+	T& operator[](int i) {
 		switch (i) {
 		case 0:
 			return x;

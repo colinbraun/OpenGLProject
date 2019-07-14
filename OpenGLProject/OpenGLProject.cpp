@@ -19,6 +19,8 @@ int main() {
 
 	Shader shader("vertexShader.vs", "fragmentShader.fs");
 
+	mat4<float> mat = mat4<float>();
+	mat[0][0] = 0.5;
 	/*float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
 			0.5f, -0.5f, -0.5f,    //  1.0f, 0.0f,
 			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
@@ -75,12 +77,14 @@ int main() {
 	glBindVertexArray(cubeVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	//Set up the position attribute
+	// Set up the position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	// Set up the color attribute
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	shader.use();
+	shader.setMat4f("theMatrix", mat);
 	// Main game loop
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
