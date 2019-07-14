@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{45bba7a0-c8a5-4dfa-9d76-12b706a283de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{2a9f04ec-fb93-4358-a558-b90be73cb010}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenGLProject.cpp">
@@ -35,5 +38,13 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vertexShader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="fragmentShader.fs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

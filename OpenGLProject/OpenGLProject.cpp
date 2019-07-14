@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "vec4.h"
+#include "Shader.h"
 
 // Function Prototypes
 GLFWwindow* setupGLFW();
@@ -16,7 +17,9 @@ const unsigned int SCR_HEIGHT = 600;
 int main() {
 	GLFWwindow* window = setupGLFW();
 
-	float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
+	Shader shader("vertexShader.vs", "fragmentShader.fs");
+
+	/*float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
 			0.5f, -0.5f, -0.5f,    //  1.0f, 0.0f,
 			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
 			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
@@ -57,6 +60,13 @@ int main() {
 			0.5f, 0.5f, 0.5f,    //  1.0f, 0.0f,
 			-0.5f, 0.5f, 0.5f,    //  0.0f, 0.0f,
 			-0.5f, 0.5f, -0.5f    //,  0.0f, 1.0f
+	};*/
+
+	float vertices[] = {
+		// positions         // colors
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
+		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
 	};
 	unsigned int cubeVBO, cubeVAO;
 	glGenBuffers(1, &cubeVBO);
@@ -64,17 +74,20 @@ int main() {
 	
 	glBindVertexArray(cubeVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	//Set up the position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	shader.use();
 	// Main game loop
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
