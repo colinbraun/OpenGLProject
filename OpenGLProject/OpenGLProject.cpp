@@ -23,7 +23,8 @@ int main() {
 	mat4<> mat = mat4<>();
 	mat[0][0] = 0.5;
 	//mat4<> tMat = translate<>(0.3f, 0.0f, 0.0f);
-	mat4<> tMat = scale<>(0.3f, 1.8f, 1.0f);
+	//mat4<> tMat = scale<>(0.3f, 1.8f, 1.0f);
+	//mat4<> tMat = rotateAboutZAxis<>(0.0f);
 	/*float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
 			0.5f, -0.5f, -0.5f,    //  1.0f, 0.0f,
 			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
@@ -87,14 +88,16 @@ int main() {
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	shader.use();
-	shader.setMat4f("theMatrix", tMat);
 	// Main game loop
+	float deg = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
-
+		mat4<> tMat = rotateAboutZAxis(deg);
+		shader.setMat4f("theMatrix", tMat);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+		deg = deg + 0.8;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
