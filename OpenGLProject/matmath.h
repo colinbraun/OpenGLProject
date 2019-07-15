@@ -41,8 +41,15 @@ mat4<T> rotate(T xDegrees, T yDegrees, T zDegrees, bool deg = true) {
 }
 
 template <typename T = float>
-mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2) {
+mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
+	T val = degrees * deg2Rad;
+	// Translate such that the axis passes through the origin
 	mat4<T> tOrigin = translate(-p1);
+	// Rotate space about the x axis so that the rotation axis lies in the xz plane
+	mat4<T> rXAxis = mat4<T>(1, 0, 0, 0,
+							 0, cos(val), -sin(val), 0,
+							 0, sin(val), cos(val), 0,
+							 0, 0, 0, 1);
 	return mat4<T>();
 }
 

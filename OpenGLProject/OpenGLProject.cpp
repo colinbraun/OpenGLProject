@@ -22,7 +22,10 @@ int main() {
 	Shader shader("vertexShader.vs", "fragmentShader.fs");
 
 	mat4<> mat = mat4<>();
-	mat[0][0] = 0.5;
+	mat4<> mat2 = mat4<>();
+	mat4<> mat3 = mat * mat2;
+	std::cout << mat3[0][0] << mat3[0][1] << std::endl;
+	//mat[0][0] = 0.5;
 	//mat4<> tMat = translate<>(0.3f, 0.0f, 0.0f);
 	//mat4<> tMat = scale<>(0.3f, 1.8f, 1.0f);
 	//mat4<> tMat = rotateAboutZAxis<>(0.0f);
