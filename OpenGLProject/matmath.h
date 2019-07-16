@@ -19,9 +19,9 @@ mat4<T> translate(T x, T y, T z) {
 template <typename T = float>
 mat4<T> translate(vec3<T> d) {
 	return mat4<T>(1, 0, 0, d.x,
-		0, 1, 0, d.y,
-		0, 0, 1, d.z,
-		0, 0, 0, 1);
+				   0, 1, 0, d.y,
+				   0, 0, 1, d.z,
+				   0, 0, 0, 1);
 }
 
 // Generate a matrix that will apply a scale to any given vertex
@@ -34,6 +34,15 @@ mat4<T> scale(T x, T y, T z) {
 				   0, 0, 0, 1);
 }
 
+// Scale overload for vec3
+template <typename T = float>
+mat4<T> scale(vec3<T> s) {
+	return mat4<T>(s.x, 0, 0, 0,
+				   0, s.y, 0, 0,
+				   0, 0, s.z, 0,
+				   0, 0, 0, 1);
+}
+
 // TODO: implement rotation (decisions still to be made)
 template <typename T = float>
 mat4<T> rotate(T xDegrees, T yDegrees, T zDegrees, bool deg = true) {
@@ -42,35 +51,39 @@ mat4<T> rotate(T xDegrees, T yDegrees, T zDegrees, bool deg = true) {
 
 template <typename T = float>
 mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
-	T val = degrees * deg2Rad;
-	mat4<T> retValue = mat4<T>();
+	T val = (T)(degrees * deg2Rad);
+	vec3<T> direction = p2 - p1;
+	T theta = atan(direction.y / direction.z);
+	T phi = atan(direction.x / sqrt(direction.y * direction.y + direction.z * direction.z));
 	// Translate such that the axis passes through the origin
-	mat4<T> tOrigin = translate(-p1);
+	mat4<T> retValue = translate(-p1);
 	// Rotate space about the x-axis so that the rotation axis lies in the xz-plane
-	mat4<T> rXAxis = mat4<T>(1, 0, 0, 0,
-							 0, cos(val), -sin(val), 0,
-							 0, sin(val), cos(val), 0,
-							 0, 0, 0, 1);
+	retValue = mat4<T>(1, 0, 0, 0,
+							 0, cos(theta), -sin(theta), 0,
+							 0, sin(theta), cos(theta), 0,
+							 0, 0, 0, 1) * retValue;
 	// Rotate space about the y-axis so that the rotation axis lies on the z-axis
-	mat4<T> rYAxis = mat4<T>(cos(val), 0, sin(val), 0,
+	retValue = mat4<T>(cos(phi), 0, sin(phi), 0,
 							 0, 1, 0, 0,
-							 -sin(val), 0, cos(val), 0,
-							 0, 0, 0, 1);
+							 -sin(phi), 0, cos(phi), 0,
+							 0, 0, 0, 1) * retValue;
 	// Perform the desired rotation by theta about the z axis
-	mat4<T> rZAxis = mat4<T>(cos(val), -sin(val), 0, 0,
+	retValue = mat4<T>(cos(val), -sin(val), 0, 0,
 							 sin(val), cos(val), 0, 0,
 							 0, 0, 1, 0,
-							 0, 0, 0, 1);
+							 0, 0, 0, 1) * retValue;
 	// Undo rotatation about y-axis
-	mat4<T> rYAxis = mat4<T>(cos(-val), 0, sin(-val), 0,
+	retValue = mat4<T>(cos(-phi), 0, sin(-phi), 0,
 							 0, 1, 0, 0,
-							 -sin(-val), 0, cos(-val), 0,
-							 0, 0, 0, 1);
+							 -sin(-phi), 0, cos(-phi), 0,
+							 0, 0, 0, 1) * retValue;
 	// Undo rotation about x-axis
-	mat4<T> rXAxis = mat4<T>(1, 0, 0, 0,
-							 0, cos(-val), -sin(-val), 0,
-							 0, sin(-val), cos(-val), 0,
-							 0, 0, 0, 1);
+	retValue = mat4<T>(1, 0, 0, 0,
+							 0, cos(-theta), -sin(-theta), 0,
+							 0, sin(-theta), cos(-theta), 0,
+							 0, 0, 0, 1) * retValue;
+	// Translate back to where it started
+	retValue = translate(p1) * retValue;
 	return retValue;
 }
 

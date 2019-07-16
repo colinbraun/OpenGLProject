@@ -5,6 +5,7 @@
 #include "vec4.h"
 #include "Shader.h"
 #include "matmath.h"
+#include "Tests.h"
 
 // Function Prototypes
 GLFWwindow* setupGLFW();
@@ -18,17 +19,8 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main() {
 	GLFWwindow* window = setupGLFW();
-
+	//testMat4();
 	Shader shader("vertexShader.vs", "fragmentShader.fs");
-
-	mat4<> mat = mat4<>();
-	mat4<> mat2 = mat4<>();
-	mat4<> mat3 = mat * mat2;
-	std::cout << mat3[0][0] << mat3[0][1] << std::endl;
-	//mat[0][0] = 0.5;
-	//mat4<> tMat = translate<>(0.3f, 0.0f, 0.0f);
-	//mat4<> tMat = scale<>(0.3f, 1.8f, 1.0f);
-	//mat4<> tMat = rotateAboutZAxis<>(0.0f);
 	/*float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
 			0.5f, -0.5f, -0.5f,    //  1.0f, 0.0f,
 			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
@@ -96,7 +88,8 @@ int main() {
 	float deg = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
-		mat4<> tMat = rotateAboutZAxis(deg);
+		//mat4<> tMat = rotateAboutZAxis(deg);
+		mat4<> tMat = rotateAboutArbitraryAxis(vec3<>(0, 0.5, 0), vec3<>(0, 0, 0), deg);
 		shader.setMat4f("theMatrix", tMat);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);

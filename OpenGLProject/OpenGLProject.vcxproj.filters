@@ -19,6 +19,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{2a9f04ec-fb93-4358-a558-b90be73cb010}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Tests">
+      <UniqueIdentifier>{56e9a4bc-11fd-43a8-a1b8-f05a2f98619d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenGLProject.cpp">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="vec3.h">
       <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests.h">
+      <Filter>Header Files\Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
