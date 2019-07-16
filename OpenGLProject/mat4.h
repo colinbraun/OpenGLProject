@@ -41,11 +41,11 @@ public:
 	// Multiply this mat4 with another. Does NOT modify this mat4.
 	// Considering implementing this in a more brute force way, since this way uses transposing (more processing).
 	mat4 operator*(mat4& m) {
-		mat4 m1 = transpose();
+		mat4 m1 = this->transpose();
 		mat4 result = mat4();
-		for (unsigned int col = 0; col < 4; col++) {
-			for (unsigned int row = 0; row < 4; row++) {
-				result[row][col] = m1[col].dot(m[row]);
+		for (unsigned int row = 0; row < 4; row++) {
+			for (unsigned int col = 0; col < 4; col++) {
+				result[col][row] = m1[row].dot(m[col]);
 			}
 		}
 		return result;

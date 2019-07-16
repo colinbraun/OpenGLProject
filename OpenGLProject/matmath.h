@@ -43,14 +43,35 @@ mat4<T> rotate(T xDegrees, T yDegrees, T zDegrees, bool deg = true) {
 template <typename T = float>
 mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
 	T val = degrees * deg2Rad;
+	mat4<T> retValue = mat4<T>();
 	// Translate such that the axis passes through the origin
 	mat4<T> tOrigin = translate(-p1);
-	// Rotate space about the x axis so that the rotation axis lies in the xz plane
+	// Rotate space about the x-axis so that the rotation axis lies in the xz-plane
 	mat4<T> rXAxis = mat4<T>(1, 0, 0, 0,
 							 0, cos(val), -sin(val), 0,
 							 0, sin(val), cos(val), 0,
 							 0, 0, 0, 1);
-	return mat4<T>();
+	// Rotate space about the y-axis so that the rotation axis lies on the z-axis
+	mat4<T> rYAxis = mat4<T>(cos(val), 0, sin(val), 0,
+							 0, 1, 0, 0,
+							 -sin(val), 0, cos(val), 0,
+							 0, 0, 0, 1);
+	// Perform the desired rotation by theta about the z axis
+	mat4<T> rZAxis = mat4<T>(cos(val), -sin(val), 0, 0,
+							 sin(val), cos(val), 0, 0,
+							 0, 0, 1, 0,
+							 0, 0, 0, 1);
+	// Undo rotatation about y-axis
+	mat4<T> rYAxis = mat4<T>(cos(-val), 0, sin(-val), 0,
+							 0, 1, 0, 0,
+							 -sin(-val), 0, cos(-val), 0,
+							 0, 0, 0, 1);
+	// Undo rotation about x-axis
+	mat4<T> rXAxis = mat4<T>(1, 0, 0, 0,
+							 0, cos(-val), -sin(-val), 0,
+							 0, sin(-val), cos(-val), 0,
+							 0, 0, 0, 1);
+	return retValue;
 }
 
 template <typename T = float>
