@@ -22,19 +22,19 @@ public:
 		this->w = w;
 	}
 
-	vec4 operator+(vec4 v) {
+	vec4 operator+(vec4 v) const {
 		return vec4(x + v.x, y + v.y, z + v.z, w + v.w);
 	}
 
-	vec4 operator-(vec4 v) {
+	vec4 operator-(vec4 v) const {
 		return vec4(x - v.x, y - v.y, z - v.z, w - v.w);
 	}
 
-	vec4 operator-() {
+	vec4 operator-() const {
 		return vec4(-x, -y, -z, -w);
 	}
 
-	T dot(vec4 v) {
+	T dot(vec4 v) const {
 		return x * v.x + y * v.y + z * v.z + w * v.w;
 	}
 

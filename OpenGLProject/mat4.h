@@ -27,8 +27,17 @@ public:
 		values[3] = vec4<T>(x3, y3, z3, w3);
 	}
 
+	mat4(vec4 v1, vec4 v2, vec4 v3, vec4 v4, bool areColumnVectors = true) {
+		values[0] = v1;
+		values[1] = v2;
+		values[2] = v3;
+		values[3] = v4;
+		if (!areColumnVectors)
+			this = &transpose();
+	}
+
 	// Create a mat4 that is the transposed version of this one. Does NOT modify this mat4.
-	mat4 transpose() {
+	mat4 transpose() const {
 		mat4 result = mat4();
 		for (unsigned int col = 0; col < 4; col++) {
 			for (unsigned int row = 0; row < 4; row++) {
@@ -40,7 +49,7 @@ public:
 
 	// Multiply this mat4 with another. Does NOT modify this mat4.
 	// Considering implementing this in a more brute force way, since this way uses transposing (more processing).
-	mat4 operator*(mat4& m) {
+	mat4 operator*(mat4& m) const {
 		mat4 m1 = this->transpose();
 		mat4 result = mat4();
 		for (unsigned int row = 0; row < 4; row++) {
