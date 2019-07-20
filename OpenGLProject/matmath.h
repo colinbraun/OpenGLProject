@@ -99,8 +99,12 @@ mat4<T> rotateAboutZAxis(T degrees) {
 
 // TODO: implement perspective projection (will need some thinking).
 template <typename T = float>
-mat4<T> perspecitve(T near, T far, T fov) {
-	
+mat4<T> perspective(T near, T far, T fov) {
+	T val = fov * deg2Rad;
+	return mat4<T>(near / (near * tan(val/2)), 0, 0, 0,
+				   0, near / (near * tan(val / 2)), 0, 0,
+				   0, 0, (-(far + near)) / (far - near), -2 * far * near / (far - near),
+				   0, 0, -1, 0);
 }
 
 // Create and return matrix that will do orthographic projection.
