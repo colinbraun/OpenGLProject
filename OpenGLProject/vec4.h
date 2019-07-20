@@ -38,7 +38,7 @@ public:
 		return x * v.x + y * v.y + z * v.z + w * v.w;
 	}
 
-	T& operator[](int i) {
+	T& operator[](const unsigned int i) {
 		switch (i) {
 		case 0:
 			return x;
