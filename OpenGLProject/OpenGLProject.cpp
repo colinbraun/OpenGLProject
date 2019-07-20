@@ -19,6 +19,7 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main() {
 	GLFWwindow* window = setupGLFW();
+	mat4<> projection = orthographic();
 	//testMat4();
 	Shader shader("vertexShader.vs", "fragmentShader.fs");
 	/*float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
@@ -89,8 +90,9 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 		//mat4<> tMat = rotateAboutZAxis(deg);
-		mat4<> tMat = rotateAboutArbitraryAxis(vec3<>(0, 0.5, 0), vec3<>(0, 0, 0), deg);
+		mat4<> tMat = rotateAboutArbitraryAxis(vec3<>(0, 0.5, 0.3), vec3<>(0.5, 0.5, 0), deg);
 		shader.setMat4f("theMatrix", tMat);
+		shader.setMat4f("projection", projection);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawArrays(GL_TRIANGLES, 0, 3);

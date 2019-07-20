@@ -6,7 +6,7 @@
 
 double deg2Rad = 2 * M_PI / 360;
 
-// Generate a matrix that will apply a translation to any given vertex
+// Generate a matrix that will apply a translation to any given vertex.
 template <typename T = float>
 mat4<T> translate(T x, T y, T z) {
 	return mat4<T>(1, 0, 0, x,
@@ -24,8 +24,8 @@ mat4<T> translate(vec3<T> d) {
 				   0, 0, 0, 1);
 }
 
-// Generate a matrix that will apply a scale to any given vertex
-// Note that the vertex should first be translated to the origin before this operation (else it will be centered somewhere else), and then translated back afterwards
+// Generate a matrix that will apply a scale to any given vertex.
+// Note that the vertex should first be translated to the origin before this operation (else it will be centered somewhere else), and then translated back afterwards.
 template <typename T = float>
 mat4<T> scale(T x, T y, T z) {
 	return mat4<T>(x, 0, 0, 0,
@@ -43,7 +43,7 @@ mat4<T> scale(vec3<T> s) {
 				   0, 0, 0, 1);
 }
 
-// TODO: implement rotation (decisions still to be made)
+// TODO: implement rotation (decisions still to be made).
 template <typename T = float>
 mat4<T> rotate(T xDegrees, T yDegrees, T zDegrees, bool deg = true) {
 	return mat4<T>(cos(xDegrees * deg2Rad), 3);
@@ -53,36 +53,37 @@ template <typename T = float>
 mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
 	T val = (T)(degrees * deg2Rad);
 	vec3<T> direction = p2 - p1;
-	T theta = atan(direction.y / direction.z);
+	// If Y direction.y and direction.z are 0, it will produce NaN - This would be bad.
+	T theta = direction.y == direction.z ? 0 : (direction.y / direction.z);
 	T phi = atan(direction.x / sqrt(direction.y * direction.y + direction.z * direction.z));
-	// Translate such that the axis passes through the origin
+	// Translate such that the axis passes through the origin.
 	mat4<T> retValue = translate(-p1);
-	// Rotate space about the x-axis so that the rotation axis lies in the xz-plane
+	// Rotate space about the x-axis so that the rotation axis lies in the xz-plane.
 	retValue = mat4<T>(1, 0, 0, 0,
 							 0, cos(theta), -sin(theta), 0,
 							 0, sin(theta), cos(theta), 0,
 							 0, 0, 0, 1) * retValue;
-	// Rotate space about the y-axis so that the rotation axis lies on the z-axis
+	// Rotate space about the y-axis so that the rotation axis lies on the z-axis.
 	retValue = mat4<T>(cos(phi), 0, sin(phi), 0,
 							 0, 1, 0, 0,
 							 -sin(phi), 0, cos(phi), 0,
 							 0, 0, 0, 1) * retValue;
-	// Perform the desired rotation by theta about the z axis
+	// Perform the desired rotation by theta about the z axis.
 	retValue = mat4<T>(cos(val), -sin(val), 0, 0,
 							 sin(val), cos(val), 0, 0,
 							 0, 0, 1, 0,
 							 0, 0, 0, 1) * retValue;
-	// Undo rotatation about y-axis
+	// Undo rotatation about y-axis.
 	retValue = mat4<T>(cos(-phi), 0, sin(-phi), 0,
 							 0, 1, 0, 0,
 							 -sin(-phi), 0, cos(-phi), 0,
 							 0, 0, 0, 1) * retValue;
-	// Undo rotation about x-axis
+	// Undo rotation about x-axis.
 	retValue = mat4<T>(1, 0, 0, 0,
 							 0, cos(-theta), -sin(-theta), 0,
 							 0, sin(-theta), cos(-theta), 0,
 							 0, 0, 0, 1) * retValue;
-	// Translate back to where it started
+	// Translate back to where it started.
 	retValue = translate(p1) * retValue;
 	return retValue;
 }
@@ -96,8 +97,16 @@ mat4<T> rotateAboutZAxis(T degrees) {
 				   0, 0, 0, 1);
 }
 
-// TODO: implement projection (will need some thinking)
+// TODO: implement perspective projection (will need some thinking).
 template <typename T = float>
-mat4<T> projection() {
+mat4<T> perspecitve(T near, T far, T fov) {
 	
+}
+
+// Create and return matrix that will do orthographic projection.
+template <typename T = float>
+mat4<T> orthographic() {
+	mat4<T> m = mat4<T>();
+	m[2][2] = 0;
+	return m;
 }
