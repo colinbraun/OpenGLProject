@@ -51,7 +51,7 @@ public:
 	}
 
 	// Tell OpenGL to use this program
-	void use() {
+	void use() const {
 		glUseProgram(program);
 	}
 	void setBool(const std::string& name, bool value) const {
