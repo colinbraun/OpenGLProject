@@ -19,10 +19,10 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main() {
 	GLFWwindow* window = setupGLFW();
-	mat4<> projection = perspective(0.05f, 10.0f, 45.0f);
+	mat4<> projection = perspective(90.0f, (float)SCR_WIDTH / SCR_HEIGHT, 0.05f, 10.0f);
 	//testMat4();
 	Shader shader("vertexShader.vs", "fragmentShader.fs");
-	/*float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
+	float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
 			0.5f, -0.5f, -0.5f,    //  1.0f, 0.0f,
 			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
 			0.5f, 0.5f, -0.5f,    //  1.0f, 1.0f,
@@ -63,14 +63,14 @@ int main() {
 			0.5f, 0.5f, 0.5f,    //  1.0f, 0.0f,
 			-0.5f, 0.5f, 0.5f,    //  0.0f, 0.0f,
 			-0.5f, 0.5f, -0.5f    //,  0.0f, 1.0f
-	};*/
+	};
 
-	float vertices[] = {
+	/*float vertices[] = {
 		// positions         // colors
 		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
 		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
 		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
-	};
+	};*/
 	unsigned int cubeVBO, cubeVAO;
 	glGenBuffers(1, &cubeVBO);
 	glGenVertexArrays(1, &cubeVAO);
@@ -79,23 +79,25 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// Set up the position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	// Set up the color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	/*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);*/
 	shader.use();
 	// Main game loop
 	float deg = 0.0f;
+	mat4<> view = translate(0.0f, 0.0f, -4.0f);
+	shader.setMat4f("projection", projection);
+	shader.setMat4f("view", view);
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
-		//mat4<> tMat = rotateAboutZAxis(deg);
-		mat4<> tMat = rotateAboutArbitraryAxis(vec3<>(0, 0.5, 0.3), vec3<>(0.5, 0.5, 0), deg);
-		shader.setMat4f("theMatrix", translate(0.0f, 0.0f, -4.0f) * tMat);
-		shader.setMat4f("projection", projection);
+		mat4<> model = rotateAboutArbitraryAxis(vec3<>(0, 0.5, 0.3), vec3<>(0.5, 0.5, 0), deg);
+		shader.setMat4f("model", model);
+		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 		deg = deg + 0.8f;
 		glfwSwapBuffers(window);
 		glfwPollEvents();

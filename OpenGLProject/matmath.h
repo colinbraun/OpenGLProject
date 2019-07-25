@@ -46,7 +46,7 @@ mat4<T> scale(vec3<T> s) {
 // TODO: implement rotation (decisions still to be made).
 template <typename T = float>
 mat4<T> rotate(T xDegrees, T yDegrees, T zDegrees, bool deg = true) {
-	return mat4<T>(cos(xDegrees * deg2Rad), 3);
+	return mat4<T>();
 }
 
 template <typename T = float>
@@ -54,7 +54,7 @@ mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
 	T val = (T)(degrees * deg2Rad);
 	vec3<T> direction = p2 - p1;
 	// If Y direction.y and direction.z are 0, it will produce NaN - This would be bad.
-	T theta = direction.y == direction.z ? 0 : (direction.y / direction.z);
+	T theta = direction.y == direction.z ? 0 : atan(direction.y / direction.z);
 	T phi = atan(direction.x / sqrt(direction.y * direction.y + direction.z * direction.z));
 	// Translate such that the axis passes through the origin.
 	mat4<T> retValue = translate(-p1);
@@ -88,6 +88,12 @@ mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
 	return retValue;
 }
 
+// Return a view matrix that will position the camera at pos, pointed at target
+template <typename T = float>
+mat4<T> lookAt(vec3<T> pos, vec3<T> target, vec3<T> up) {
+
+}
+
 template <typename T = float>
 mat4<T> rotateAboutZAxis(T degrees) {
 	double val = degrees * deg2Rad;
@@ -99,10 +105,10 @@ mat4<T> rotateAboutZAxis(T degrees) {
 
 // TODO: implement perspective projection (will need some thinking).
 template <typename T = float>
-mat4<T> perspective(T near, T far, T fov) {
-	T val = fov * deg2Rad;
-	return mat4<T>(near / (near * tan(val/2)), 0, 0, 0,
-				   0, near / (near * tan(val / 2)), 0, 0,
+mat4<T> perspective(T fov, T ratio, T near, T far, bool areDegrees = true) {
+	T tanValDiv2 = areDegrees ? tan(fov * deg2Rad / 2) : tan(fov / 2);
+	return mat4<T>(ratio * near / (near * tanValDiv2), 0, 0, 0,
+				   0, near / (near * tanValDiv2), 0, 0,
 				   0, 0, (-(far + near)) / (far - near), -2 * far * near / (far - near),
 				   0, 0, -1, 0);
 }

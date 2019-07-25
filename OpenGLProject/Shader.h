@@ -66,7 +66,7 @@ public:
 		glUniform1f(glGetUniformLocation(program, name.c_str()), value);
 	}
 
-	void setMat4f(const std::string& name, mat4<float> value) const {
+	void setMat4f(const std::string& name, mat4<float>& value) const {
 		glUniformMatrix4fv(glGetUniformLocation(program, name.c_str()), 1, GL_FALSE, value.ptr());
 	}
 };
