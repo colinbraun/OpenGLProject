@@ -29,12 +29,19 @@ public:
 
 	// This constructor has not been tested for the !areColumnVectors case
 	mat4(vec4<T> v1, vec4<T> v2, vec4<T> v3, vec4<T> v4, bool areColumnVectors = true) {
-		values[0] = v1;
-		values[1] = v2;
-		values[2] = v3;
-		values[3] = v4;
-		if (!areColumnVectors)
-			this = &transpose();
+		if (areColumnVectors) {
+			values[0] = v1;
+			values[1] = v2;
+			values[2] = v3;
+			values[3] = v4;
+		}
+		else {
+			mat4 trans = transpose();
+			values[0] = trans[0];
+			values[1] = trans[1];
+			values[2] = trans[2];
+			values[3] = trans[3];
+		}
 	}
 
 	// Create a mat4 that is the transposed version of this one. Does NOT modify this mat4.

@@ -87,18 +87,19 @@ int main() {
 	shader.use();
 	// Main game loop
 	float deg = 0.0f;
-	mat4<> view = translate(0.0f, 0.0f, -4.0f);
+	//mat4<> view = translate(0.0f, 0.0f, -4.0f);
+	mat4<> view = lookAt(vec3<>(0.0f, 0.0f, -5.0f), vec3<>(0.0f, 0.0f, 0.0f), vec3<>(0.0f, 1.0f, 0.0f));
 	shader.setMat4f("projection", projection);
 	shader.setMat4f("view", view);
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
-		mat4<> model = rotateAboutArbitraryAxis(vec3<>(0, 0.5, 0.3), vec3<>(0.5, 0.5, 0), deg);
+		mat4<> model = rotateAboutArbitraryAxis(vec3<>(0.0f, 0.5f, 0.3f), vec3<>(0.5f, 0.5f, 0.0f), deg);
 		shader.setMat4f("model", model);
 		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		deg = deg + 0.8f;
+		deg = deg + 0.2f;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -109,7 +110,7 @@ int main() {
 
 GLFWwindow* setupGLFW() {
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGLProject", NULL, NULL);

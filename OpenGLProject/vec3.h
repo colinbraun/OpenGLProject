@@ -51,4 +51,12 @@ public:
 		}
 	}
 
+	vec3 normalize() {
+		T mag = magnitude();
+		return vec3(x / mag, y / mag, z / mag);
+	}
+
+	T magnitude() {
+		return sqrt(x * x + y * y + z * z);
+	}
 };

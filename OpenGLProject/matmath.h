@@ -3,6 +3,7 @@
 #include "mat4.h"
 #include <corecrt_math_defines.h>
 #include "vec3.h"
+#include "vec4.h"
 
 double deg2Rad = 2 * M_PI / 360;
 
@@ -59,6 +60,7 @@ mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
 	// Translate such that the axis passes through the origin.
 	mat4<T> retValue = translate(-p1);
 	// Rotate space about the x-axis so that the rotation axis lies in the xz-plane.
+	// Note the order the matrices are multipled in. Matrix multiplication is not commutative, so the order matters.
 	retValue = mat4<T>(1, 0, 0, 0,
 							 0, cos(theta), -sin(theta), 0,
 							 0, sin(theta), cos(theta), 0,
@@ -89,9 +91,24 @@ mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
 }
 
 // Return a view matrix that will position the camera at pos, pointed at target
+// For an understanding of how this works mathematically, see:
+// https://www.geertarien.com/blog/2017/07/30/breakdown-of-the-lookAt-function-in-OpenGL/
 template <typename T = float>
 mat4<T> lookAt(vec3<T> pos, vec3<T> target, vec3<T> up) {
+	vec3<T> zaxis = (pos - target).normalize();
+	vec3<T> xaxis = zaxis.cross(up).normalize();
+	vec3<T> yaxis = xaxis.cross(zaxis);
 
+	zaxis = -zaxis;
+
+	mat4<T> viewMatrix = mat4<T>(
+	  vec4<T>(xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(pos)),
+	  vec4<T>(yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(pos)),
+	  vec4<T>(zaxis.x, zaxis.y, zaxis.z, -zaxis.dot(pos)),
+	  vec4<T>(0, 0, 0, 1), false
+	);
+
+	return viewMatrix;
 }
 
 template <typename T = float>
@@ -106,7 +123,7 @@ mat4<T> rotateAboutZAxis(T degrees) {
 // TODO: implement perspective projection (will need some thinking).
 template <typename T = float>
 mat4<T> perspective(T fov, T ratio, T near, T far, bool areDegrees = true) {
-	T tanValDiv2 = areDegrees ? tan(fov * deg2Rad / 2) : tan(fov / 2);
+	T tanValDiv2 = (T)(areDegrees ? tan(fov * deg2Rad / 2) : tan(fov / 2));
 	return mat4<T>(ratio * near / (near * tanValDiv2), 0, 0, 0,
 				   0, near / (near * tanValDiv2), 0, 0,
 				   0, 0, (-(far + near)) / (far - near), -2 * far * near / (far - near),
