@@ -96,7 +96,7 @@ int main() {
 	clock_t lastTime = clock();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
-		mat4f model = rotateAboutArbitraryAxis(vec3<>(0.0f, 0.5f, 0.3f), vec3<>(0.5f, 0.5f, 0.0f), deg);
+		mat4f model = rotateAboutArbitraryAxis(vec3<>(0.0f, 0.5f, 0.3f), vec3<>(0.5f, 0.5f, 0.0f), deg, false);
 		//mat4f model = rotateAboutXAxis(deg, false) * translate(0.0f, 0.0f, -1.0f);
 		shader.setMat4f("model", model);
 		

@@ -50,9 +50,14 @@ mat4<T> rotate(T xDegrees, T yDegrees, T zDegrees, bool deg = true) {
 	return mat4<T>();
 }
 
+/* Create a matrix that will rotate all points about an arbitrary axis
+ * p1 - the first point defining the axis
+ * p2 - The second point defining the axis
+ * degrees - 
+*/
 template <typename T = float>
-mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
-	T val = (T)(degrees * deg2Rad);
+mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T angle, bool isRadians = true) {
+	T val = (T)(isRadians ? angle : angle * deg2Rad);
 	vec3<T> direction = p2 - p1;
 	// If Y direction.y and direction.z are 0, it will produce NaN - This would be bad.
 	T theta = direction.y == direction.z ? 0 : atan(direction.y / direction.z);
@@ -90,28 +95,33 @@ mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
 	return retValue;
 }
 
-// Create a matrix that will rotate points counterclockwise about the Z-axis
+// Create a matrix that will rotate points counterclockwise about the z-axis
+// when looking down the positive z-axis to the origin
 template <typename T = float>
-mat4<T> rotateAboutZAxis(T value, bool isRadians = true) {
-	double val = isRadians ? value : value * deg2Rad;
+mat4<T> rotateAboutZAxis(T angle, bool isRadians = true) {
+	double val = isRadians ? angle : angle * deg2Rad;
 	return mat4<T>((T)cos(val), (T)(-sin(val)), 0, 0,
 		(T)sin(val), (T)cos(val), 0, 0,
 		0, 0, 1, 0,
 		0, 0, 0, 1);
 }
 
+// Create a matrix that will rotate points counterclockwise about the x-axis
+// when looking down the positive x-axis to the origin
 template <typename T = float>
-mat4<T> rotateAboutXAxis(T value, bool isRadians = true) {
-	double val = isRadians ? value : value * deg2Rad;
+mat4<T> rotateAboutXAxis(T angle, bool isRadians = true) {
+	double val = isRadians ? angle : angle * deg2Rad;
 	return mat4<T>(1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, (T)cos(val), (T)(-sin(val)), 0.0f,
 		0.0f, (T)sin(val), (T)cos(val), 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
 }
 
+// Create a matrix that will rotate points counterclockwise about the y-axis
+// when looking down the positive y-axis to the origin
 template <typename T = float>
-mat4<T> rotateAboutYAxis(T value, bool isRadians = true) {
-	double val = isRadians ? value : value * deg2Rad;
+mat4<T> rotateAboutYAxis(T angle, bool isRadians = true) {
+	double val = isRadians ? angle : angle * deg2Rad;
 	return mat4<T>((T)cos(val), 0, (T)sin(val), 0,
 		0, 1, 0, 0,
 		(T)(-sin(val)), 0, (T)cos(val), 1,
