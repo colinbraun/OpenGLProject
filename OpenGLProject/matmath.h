@@ -90,35 +90,55 @@ mat4<T> rotateAboutArbitraryAxis(vec3<T> p1, vec3<T> p2, T degrees) {
 	return retValue;
 }
 
+// Create a matrix that will rotate points counterclockwise about the Z-axis
+template <typename T = float>
+mat4<T> rotateAboutZAxis(T value, bool isRadians = true) {
+	double val = isRadians ? value : value * deg2Rad;
+	return mat4<T>((T)cos(val), (T)(-sin(val)), 0, 0,
+		(T)sin(val), (T)cos(val), 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1);
+}
+
+template <typename T = float>
+mat4<T> rotateAboutXAxis(T value, bool isRadians = true) {
+	double val = isRadians ? value : value * deg2Rad;
+	return mat4<T>(1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, (T)cos(val), (T)(-sin(val)), 0.0f,
+		0.0f, (T)sin(val), (T)cos(val), 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+template <typename T = float>
+mat4<T> rotateAboutYAxis(T value, bool isRadians = true) {
+	double val = isRadians ? value : value * deg2Rad;
+	return mat4<T>((T)cos(val), 0, (T)sin(val), 0,
+		0, 1, 0, 0,
+		(T)(-sin(val)), 0, (T)cos(val), 1,
+		0.0f, 0.0f, 0.0f, 1.0f);
+}
+
 // Return a view matrix that will position the camera at pos, pointed at target
 // For an understanding of how this works mathematically, see:
 // https://www.geertarien.com/blog/2017/07/30/breakdown-of-the-lookAt-function-in-OpenGL/
 template <typename T = float>
 mat4<T> lookAt(vec3<T> pos, vec3<T> target, vec3<T> up) {
-	vec3<T> zaxis = (pos - target).normalize();
-	vec3<T> xaxis = zaxis.cross(up).normalize();
-	vec3<T> yaxis = xaxis.cross(zaxis);
-
-	zaxis = -zaxis;
-
-	mat4<T> viewMatrix = mat4<T>(
-	  vec4<T>(xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(pos)),
-	  vec4<T>(yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(pos)),
-	  vec4<T>(zaxis.x, zaxis.y, zaxis.z, -zaxis.dot(pos)),
-	  vec4<T>(0, 0, 0, 1), false
-	);
-
-	return viewMatrix;
+	vec3<T> direction = target - pos;
+	mat4<T> retValue = translate(-pos);
+	T divNum = direction.z / direction.y;
+	if (divNum != NAN) {
+		T theta = atan(divNum) + M_PI_2;
+		retValue = rotateAboutXAxis(theta) * retValue;
+	} 
+	divNum = sqrt(direction.z * direction.z + direction.y * direction.y) / direction.x;
+	if (divNum != NAN) {
+		T theta = -atan(divNum);
+		retValue = rotateAboutYAxis(theta) * retValue;
+	}
+	
+	return retValue;
 }
 
-template <typename T = float>
-mat4<T> rotateAboutZAxis(T degrees) {
-	double val = degrees * deg2Rad;
-	return mat4<T>((T)cos(val), (T)(-sin(val)), 0, 0,
-				   (T)sin(val), (T)cos(val), 0, 0,
-				   0, 0, 1, 0,
-				   0, 0, 0, 1);
-}
 
 // TODO: implement perspective projection (will need some thinking).
 template <typename T = float>

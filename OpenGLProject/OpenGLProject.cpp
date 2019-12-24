@@ -2,6 +2,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <ctime>
 #include "vec4.h"
 #include "Shader.h"
 #include "matmath.h"
@@ -18,8 +19,9 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 int main() {
+	//typedef mat4<float> mat4f;
 	GLFWwindow* window = setupGLFW();
-	mat4<> projection = perspective(90.0f, (float)SCR_WIDTH / SCR_HEIGHT, 0.05f, 10.0f);
+	mat4f projection = perspective(90.0f, (float)SCR_WIDTH / SCR_HEIGHT, 0.05f, 50.0f);
 	//testMat4();
 	Shader shader("vertexShader.vs", "fragmentShader.fs");
 	float vertices[] = { -0.5f, -0.5f, -0.5f,    //  0.0f, 0.0f,
@@ -87,23 +89,26 @@ int main() {
 	shader.use();
 	// Main game loop
 	float deg = 0.0f;
-	//mat4<> view = translate(0.0f, 0.0f, -4.0f);
-	mat4<> view = lookAt(vec3<>(0.0f, 0.0f, -5.0f), vec3<>(0.0f, 0.0f, 0.0f), vec3<>(0.0f, 1.0f, 0.0f));
+	mat4f view = translate(0.0f, 0.0f, -4.0f);
+	//mat4f view = lookAt(vec3<>(0.0f, 0.0f, -10.0f), vec3<>(0.0f, 0.0f, 0.0f), vec3<>(0.0f, 1.0f, 0.0f));
 	shader.setMat4f("projection", projection);
 	shader.setMat4f("view", view);
+	clock_t lastTime = clock();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
-		mat4<> model = rotateAboutArbitraryAxis(vec3<>(0.0f, 0.5f, 0.3f), vec3<>(0.5f, 0.5f, 0.0f), deg);
+		mat4f model = rotateAboutArbitraryAxis(vec3<>(0.0f, 0.5f, 0.3f), vec3<>(0.5f, 0.5f, 0.0f), deg);
+		//mat4f model = rotateAboutXAxis(deg, false) * translate(0.0f, 0.0f, -1.0f);
 		shader.setMat4f("model", model);
 		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		deg = deg + 0.2f;
+		clock_t thisTime = clock();
+		deg = deg + (thisTime - lastTime) * 200 / CLOCKS_PER_SEC;
+		lastTime = thisTime;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
 	glfwTerminate();
 	return 0;
 }

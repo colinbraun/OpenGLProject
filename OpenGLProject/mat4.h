@@ -17,6 +17,9 @@ public:
 		values[3][3] = 1;
 	}
 
+	/* Construct a 4x4 matrix, passing the elements by row.
+	 * If parameters are placed on seperate lines, the result will look like the actual 4x4 matrix.
+	*/
 	mat4(const T& x0, const T& x1, const T& x2, const T& x3,
 		const T& y0, const T& y1, const T& y2, const T& y3,
 		const T& z0, const T& z1, const T& z2, const T& z3,
@@ -85,3 +88,5 @@ public:
 		}
 	}
 };
+
+typedef mat4<float> mat4f;
