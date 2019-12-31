@@ -2,7 +2,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <ctime>
+#include <chrono>
 #include "vec4.h"
 #include "Shader.h"
 #include "matmath.h"
@@ -93,7 +93,7 @@ int main() {
 	//mat4f view = lookAt(vec3<>(0.0f, 0.0f, -10.0f), vec3<>(0.0f, 0.0f, 0.0f), vec3<>(0.0f, 1.0f, 0.0f));
 	shader.setMat4f("projection", projection);
 	shader.setMat4f("view", view);
-	clock_t lastTime = clock();
+	chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 		mat4f model = rotateAboutArbitraryAxis(vec3<>(0.0f, 0.5f, 0.3f), vec3<>(0.5f, 0.5f, 0.0f), deg, false);
@@ -103,9 +103,10 @@ int main() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		clock_t thisTime = clock();
-		deg = deg + (thisTime - lastTime) * 200 / CLOCKS_PER_SEC;
-		lastTime = thisTime;
+		chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+		chrono::duration<double> time_span = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+		deg = deg + (time_span.count()) * 50;
+		t1 = t2;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
